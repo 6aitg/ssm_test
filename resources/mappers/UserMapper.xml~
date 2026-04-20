@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.abtu.mappers.UserMapper">
+	<!-- 通用字段 -->
+	<sql id="Base_Column_List">
+		id, username, password, name, phone,gender,school,major,classes, status, create_time as createTime
+	</sql>
+
+	<!-- 你原有方法1：findUserById -->
+	<select id="findUserById" parameterType="int" resultType="cn.edu.abtu.pojo.User">
+		select <include refid="Base_Column_List"/> from tb_user where id = #{id}
+	</select>
+
+	<!-- 你原有方法2：findUserByUserNameAndPassword -->
+	<select id="findUserByUserNameAndPassword" resultType="cn.edu.abtu.pojo.User">
+		select <include refid="Base_Column_List"/> from tb_user
+		where username = #{userName} and password = #{password}
+	</select>
+
+	<!-- 新增：用户列表查询 -->
+	<select id="list" parameterType="cn.edu.abtu.pojo.User" resultType="cn.edu.abtu.pojo.User">
+		select <include refid="Base_Column_List"/> from tb_user
+		<where>
+			<if test="userName != null and userName != ''">
+				and username like concat('%', #{userName}, '%')
+			</if>
+		</where>
+	</select>
+
+	<!-- 新增：新增用户 -->
+	<insert id="insert" parameterType="cn.edu.abtu.pojo.User">
+		insert into tb_user (username, password, name, phone, gender,school,major,classes,status)
+		values (#{userName}, #{password}, #{name}, #{phone},#{gender},#{school},#{major},#{classes}, #{status})
+	</insert>
+
+	<!-- 新增：修改用户 -->
+	<update id="update" parameterType="cn.edu.abtu.pojo.User">
+		update tb_user
+		<set>
+			<if test="userName != null and userName != ''">username = #{userName},</if>
+			<if test="password != null and password != ''">password = #{password},</if>
+			<if test="name != null and name != ''">name = #{name},</if>
+			<if test="phone != null and phone != ''">phone = #{phone},</if>
+			<if test="gender != null and gender != ''">gender = #{gender},</if>
+			<if test="school != null and school != ''">school = #{school},</if>
+			<if test="major != null and major != ''">major = #{major},</if>
+			<if test="classes != null and classes != ''">classes = #{classes},</if>
+			<if test="status != null">status = #{status},</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- 新增：删除用户 -->
+	<delete id="delete" parameterType="int">
+		delete from tb_user where id = #{id}
+	</delete>
+</mapper>

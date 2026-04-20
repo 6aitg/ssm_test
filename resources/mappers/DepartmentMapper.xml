@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.abtu.mappers.DepartmentMapper">
+
+	<resultMap type="cn.edu.abtu.pojo.Department" id="BaseResultMap">
+		<result column="id" property="id"/>
+		<result column="dept_name" property="deptName"/>
+	</resultMap>
+
+	<select id="getDepartmentList" parameterType="cn.edu.abtu.pojo.Department" resultMap="BaseResultMap">
+		select * from tb_department
+		<where>
+            <if test="deptName != null and deptName != ''">
+                dept_name like concat('%', #{deptName}, '%')
+            </if>
+        </where>
+	</select>
+
+	<select id="getDepartmentById" parameterType="int" resultMap="BaseResultMap">
+		select * from tb_department where id = #{arg0}
+	</select>
+
+	<delete id="deleteDepartmentById" parameterType="int">
+		delete from tb_department where id = #{arg0}
+	</delete>
+
+	<insert id="addDepartment" parameterType="cn.edu.abtu.pojo.Department">
+		insert into tb_department(dept_name) values(#{deptName})
+	</insert>
+
+	<update id="updateDepartment" parameterType="cn.edu.abtu.pojo.Department">
+		update tb_department
+			<set>
+				<if test="deptName != null and deptName != ''">
+					dept_name = #{deptName},
+				</if>
+			</set>
+		where id = #{id}
+	</update>
+</mapper>

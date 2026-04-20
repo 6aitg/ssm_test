@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.abtu.mappers.CategoryMapper">
+
+    <resultMap type="cn.edu.abtu.pojo.Category" id="BaseResultMap">
+        <result column="id" property="id"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="description" property="description"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="creat_time" property="createTime"/>
+    </resultMap>
+
+    <select id="getCategoryList" parameterType="cn.edu.abtu.pojo.Category" resultMap="BaseResultMap">
+        select * from tb_category
+        <where>
+            <if test="categoryName != null and categoryName != ''">
+                category_name like concat('%', #{categoryName}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getCategoryById" parameterType="int" resultMap="BaseResultMap">
+        select * from tb_category where id = #{0}
+    </select>
+
+    <insert id="addCategory" parameterType="cn.edu.abtu.pojo.Category">
+        insert into tb_category(category_name, description,parent_id,create_time)
+        values(#{categoryName}, #{description},#{parentId},#{createTime})
+    </insert>
+
+    <update id="updateCategory" parameterType="cn.edu.abtu.pojo.Category">
+        update tb_category
+        <set>
+            <if test="categoryName != null and categoryName != ''">
+                category_name = #{categoryName},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="parent_id != null and parent_id != ''">
+                parent_id = #{parentId},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCategoryById" parameterType="int">
+        delete from tb_category where id = #{0}
+    </delete>
+</mapper>
