@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试用户管理功能</title>
+    <script src="/common/jquery/jquery-3.4.1.js"></script>
+    <script src="/js/context_path.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        button { margin: 5px; padding: 8px 16px; cursor: pointer; }
+        .result { margin: 10px 0; padding: 10px; background-color: #f5f5f5; border-radius: 4px; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>用户管理功能测试</h1>
+    
+    <div class="test-section">
+        <h2>1. 测试用户列表接口</h2>
+        <button onclick="testUserList()">获取用户列表</button>
+        <div id="listResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. 测试添加用户功能</h2>
+        <input type="text" id="newUsername" placeholder="用户名" style="margin: 5px;">
+        <input type="password" id="newPassword" placeholder="密码" style="margin: 5px;">
+        <input type="text" id="newName" placeholder="真实姓名" style="margin: 5px;">
+        <input type="text" id="newPhone" placeholder="电话" style="margin: 5px;">
+        <input type="text" id="newSchool" placeholder="学院" style="margin: 5px;">
+        <input type="text" id="newMajor" placeholder="专业" style="margin: 5px;">
+        <input type="text" id="newClasses" placeholder="班级" style="margin: 5px;">
+        <input type="text" id="newGender" placeholder="性别" style="margin: 5px;">
+        <button onclick="testAddUser()">添加用户</button>
+        <div id="addResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. 测试编辑UI页面</h2>
+        <button onclick="testEditUI()">打开编辑页面</button>
+        <div id="editResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. 测试保存用户接口</h2>
+        <button onclick="testSaveOrUpdate()">保存测试用户</button>
+        <div id="saveResult" class="result"></div>
+    </div>
+
+    <script>
+        console.log('ctx变量值:', ctx);
+
+        function testUserList() {
+            $.ajax({
+                url: ctx + '/user/list',
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log('用户列表接口响应:', data);
+                    $('#listResult').html('<div class="success">成功！用户数量: ' + data.count + '</div>');
+                    if (data.data && data.data.length > 0) {
+                        $('#listResult').append('<div>前3个用户:</div><ul>');
+                        for (var i = 0; i < Math.min(3, data.data.length); i++) {
+                            var user = data.data[i];
+                            $('#listResult').append('<li>ID: ' + user.id + ', 用户名: ' + user.userName + ', 姓名: ' + user.name + '</li>');
+                        }
+                        $('#listResult').append('</ul>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('用户列表接口错误:', xhr, status, error);
+                    $('#listResult').html('<div class="error">失败！状态: ' + status + ', 错误: ' + error + '</div>');
+                }
+            });
+        }
+
+        function testAddUser() {
+            var username = $('#newUsername').val();
+            var password = $('#newPassword').val();
+            var name = $('#newName').val();
+            var phone = $('#newPhone').val();
+            var gender = $('#newGender').val();
+            var school = $('#newSchool').val();
+            var major = $('#newMajor').val();
+            var classes = $('#newClasses').val();
+            
+            if (!username) {
+                $('#addResult').html('<div class="error">请输入用户名</div>');
+                return;
+            }
+            
+            var userData = {
+                userName: username,
+                password: password || null,
+                name: name,
+                phone: phone,
+                gender:gender,
+                school:school,
+                major:major,
+                classes:classes,
+                status: 1
+            };
+            
+            $.ajax({
+                url: ctx + '/user/saveOrUpdate',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(userData),
+                dataType: 'json',
+                success: function(data) {
+                    console.log('添加用户接口响应:', data);
+                    $('#addResult').html('<div class="success">成功！消息: ' + data.msg + '</div>');
+                    // 添加成功后刷新用户列表
+                    testUserList();
+                },
+                error: function(xhr, status, error) {
+                    console.error('添加用户接口错误:', xhr, status, error);
+                    $('#addResult').html('<div class="error">失败！状态: ' + status + ', 错误: ' + error + '</div>');
+                    if (xhr.responseText) {
+                        $('#addResult').append('<div>响应内容: ' + xhr.responseText + '</div>');
+                    }
+                }
+            });
+        }
+
+        function testEditUI() {
+            window.open(ctx + '/user/editUI', '_blank', 'width=600,height=400');
+            $('#editResult').html('<div>已打开编辑页面，请检查页面内容和控制台错误</div>');
+        }
+
+        function testSaveOrUpdate() {
+            var testUser = {
+                userName: 'test_direct_save',
+                password: '123456',
+                name: '直接保存测试',
+                phone: '13800000000',
+                status: 1
+            };
+            
+            $.ajax({
+                url: ctx + '/user/saveOrUpdate',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(testUser),
+                dataType: 'json',
+                success: function(data) {
+                    console.log('保存用户接口响应:', data);
+                    $('#saveResult').html('<div class="success">成功！消息: ' + data.msg + '</div>');
+                    // 保存成功后刷新用户列表
+                    testUserList();
+                },
+                error: function(xhr, status, error) {
+                    console.error('保存用户接口错误:', xhr, status, error);
+                    $('#saveResult').html('<div class="error">失败！状态: ' + status + ', 错误: ' + error + '</div>');
+                    if (xhr.responseText) {
+                        $('#saveResult').append('<div>响应内容: ' + xhr.responseText + '</div>');
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            testUserList();
+        });
+    </script>
+</body>
+</html>
