@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>分类列表</title>
+    <link rel="stylesheet" th:href="@{/common/layui/css/layui.css}" media="all"/>
+    <script type="text/javascript" th:src="@{/common/layui/layui.all.js}"></script>
+    <script type="text/javascript" th:src="@{/js/context_path.js}"></script>
+</head>
+<body>
+<div class="top_tool">
+    <button class="layui-btn btn_extend" type="button" id="add">
+        <i class="layui-icon">&#xe608;</i> 添加分类
+    </button>
+    <div class="layui-form-item layui-input-inline">
+        <label class="layui-form-label">分类名称：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="categoryName" id="categoryName" placeholder="请输入分类名称" autocomplete="off" class="layui-input"/>
+        </div>
+    </div>
+    <button class="layui-btn btn_extend" data-type="reload" id="search-button" style="margin-left:20px;">
+        <i class="layui-icon">&#xe615;</i> 搜索
+    </button>
+</div>
+
+<script type="text/html" id="barCategory">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<table id="table-category" lay-filter="table-category"></table>
+<script type="text/javascript" th:src="@{/js/category.js}"></script>
+</body>
+</html>

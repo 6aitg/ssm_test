@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>编辑用户</title>
+    <link rel="stylesheet" th:href="@{/common/layui/css/layui.css}" media="all" />
+    <script type="text/javascript" th:src="@{/common/layui/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/js/context_path.js}"></script>
+</head>
+<body>
+<form class="layui-form" id="form" action="">
+    <input id="id" name="id" type="hidden" th:value="${user?.id}" />
+<input id="flag" name="flag" type="hidden" th:value="${flag}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+            <input type="text" id="userName" name="userName" style="width:100%" lay-verify="required" lay-reqtext="用户名不能为空" placeholder="请输入用户名" autocomplete="off" class="layui-input" th:value="${user?.userName}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="password" id="password" name="password" style="width:100%" placeholder="请输入密码（不修改请留空）" autocomplete="off" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">真实姓名</label>
+        <div class="layui-input-block">
+            <input type="text" id="name" name="name" style="width:100%" lay-verify="required" lay-reqtext="真实姓名不能为空" placeholder="请输入真实姓名" autocomplete="off" class="layui-input" th:value="${user?.name}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系电话</label>
+        <div class="layui-input-block">
+            <input type="text" id="phone" name="phone" style="width:100%" placeholder="请输入联系电话" autocomplete="off" class="layui-input" th:value="${user?.phone}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="text" id="gender" name="gender" style="width:100%" lay-verify="required" lay-reqtext="性别不能为空" placeholder="请输入性别" autocomplete="off" class="layui-input" th:value="${user?.gender}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">学院</label>
+        <div class="layui-input-block">
+            <input type="text" id="school" name="school" style="width:100%" lay-verify="required" lay-reqtext="学院不能为空" placeholder="请输入学院" autocomplete="off" class="layui-input" th:value="${user?.school}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">专业</label>
+        <div class="layui-input-block">
+            <input type="text" id="major" name="major" style="width:100%" lay-verify="required" lay-reqtext="专业不能为空" placeholder="请输入专业" autocomplete="off" class="layui-input" th:value="${user?.major}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">班级</label>
+        <div class="layui-input-block">
+            <input type="text" id="classes" name="classes" style="width:100%" lay-verify="required" lay-reqtext="班级不能为空" placeholder="请输入班级" autocomplete="off" class="layui-input" th:value="${user?.classes}"/>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status" value="1" title="正常" th:checked="${user?.status == 1 || user == null}"/>
+            <input type="radio" name="status" value="0" title="禁用" th:checked="${user?.status == 0}"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button id="submit" type="button" class="layui-btn" lay-submit="true" lay-filter="formDemo">保存</button>
+            <button id="reset" type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" th:src="@{/js/updateuser.js}"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/common/layui/css/layui.css}" media="all" />
+    <script type="text/javascript" th:src="@{/common/layui/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/js/context_path.js}"></script>
+</head>
+<body>
+<form class="layui-form" id="form" action="">
+    <input id="id" name="id" type="hidden" th:value="${id}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">部门名称</label>
+        <div class="layui-input-block">
+            <input type="text" id="deptName" name="deptName" style="width:100%" lay-verify="required" lay-reqtext="部门名称不能为空" placeholder="请输入部门名称" autocomplete="off" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <!-- button自带提交属性，影响ajax提交，增加type="button" -->
+            <button id="submit" type="button" class="layui-btn" lay-submit="true" lay-filter="formDemo">保存</button>
+            <button id="reset" type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" th:src="@{/js/updatedepartment.js}"></script>
+</body>
+</html>

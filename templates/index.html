@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>登录</title>
+    <!-- 引入jQuery -->
+    <script th:src="@{/common/jquery/jquery-3.4.1.js}"></script>
+    <!-- 引入context_path.js获取上下文路径 -->
+    <script th:src="@{/js/context_path.js}"></script>
+    <script>
+        $(function() {
+            // 为表单提交事件绑定处理函数
+            $('form').on('submit', function(e) {
+                // 阻止表单默认提交行为
+                e.preventDefault();
+                
+                // 获取表单数据
+                var userName = $('input[name="userName"]').val();
+                var password = $('input[name="password"]').val();
+                
+                // 使用AJAX提交登录请求
+                $.ajax({
+                    url: ctx + '/user/login',
+                    type: 'POST',
+                    data: {
+                        userName: userName,
+                        password: password
+                    },
+                    success: function(result) {
+                        // 根据返回的JSON数据处理
+                        if (result.code === 0) {
+                            // 登录成功，跳转到主页面
+                            window.location.href = ctx + '/system/main';
+                        } else {
+                            // 登录失败，显示错误信息
+                            alert(result.msg);
+                        }
+                    },
+                    error: function() {
+                        // 请求失败，显示错误信息
+                        alert('登录请求失败，请稍后重试');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<form>
+    登录名：<input type="text" name="userName" /><br/>
+    密码：<input type="password" name="password" /><br/>
+    <input type="submit" value="提交" />
+</form>
+</body>
+</html>

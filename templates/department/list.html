@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>部门列表</title>
+    <link rel="stylesheet" th:href="@{/common/layui/css/layui.css}" media="all"/>
+    <script type="text/javascript" th:src="@{/common/layui/layui.all.js}"></script>
+    <script type="text/javascript" th:src="@{/js/context_path.js}"></script>
+</head>
+<body>
+<div class="top-tool">
+    <!-- 新增按钮 -->
+    <button class="layui-btn btn_extend" type="button" id="add">
+        <i class="layui-icon">&#xe608;</i> 添加部门
+    </button>
+    <!-- 查询条件 -->
+    <div class="layui-form-item layui-input-inline">
+        <label class="layui-form-label">部门名称：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="deptName" id="deptName" placeholder="请输入部门名称" autocomplete="off" class="layui-input" />
+        </div>
+    </div>
+    <!-- 搜索按钮 -->
+    <button class="layui-btn btn_extend" data-type="reload" id="search-button">
+        <i class="layui-icon">&#xe615;</i> 搜索
+    </button>
+</div>
+
+<!-- 操作栏模板 -->
+<script type="text/html" id="barDepartment">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- 表格容器 -->
+<table id="table-department" lay-filter="table-department"></table>
+
+<script type="text/javascript" th:src="@{/js/department.js}"></script>
+</body>
+</html>

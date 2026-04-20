@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>分类编辑</title>
+    <link rel="stylesheet" th:href="@{/common/layui/css/layui.css}" media="all" />
+    <script type="text/javascript" th:src="@{/common/layui/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/js/context_path.js}"></script>
+</head>
+<body>
+<form class="layui-form" id="form" action="formDemo">
+    <input id="id" name="id" type="hidden" lay-verify="required" th:value="${id != null ? id : 0}" />
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">分类名称</label>
+        <div class="layui-input-block">
+            <input type="text" id="categoryName" name="categoryName" lay-verify="required" placeholder="请输入分类名称" autocomplete="off" class="layui-input"/>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">分类描述</label>
+        <div class="layui-input-block">
+            <textarea id="description" name="description" lay-verify="required" placeholder="请输入分类描述" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">父类ID</label>
+        <div class="layui-input-block">
+            <textarea id="parentId" name="parentId" lay-verify="required" placeholder="请输入父类ID" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button id="submit" type="button" class="layui-btn"
+                    lay-submit='true' lay-filter='formDemo'>保存</button>
+            <button id="reset" type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" th:src="@{/js/updatecategory.js}"></script>
+</body>
+</html>
