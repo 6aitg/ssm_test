@@ -1,0 +1,113 @@
+layui.use(['table','jquery','form'], function(){
+    var table = layui.table;
+    var form = layui.form;
+    var $ = layui.$;
+
+    table.render({
+        elem: '#table-category'
+        ,id: 'table-category'
+        ,height: 558
+        ,url: ctx + '/cate/getList'
+        ,method: 'post'
+        ,even: true
+        ,page: true
+        ,cols: [[
+            {field: 'id', title: 'ID', sort: true, fixed: 'left'}
+            ,{field: 'categoryName', title: '分类名称', sort: true}
+            ,{field: 'parentId', title: '父类ID', sort: true}
+            ,{field: 'description', title: '分类描述'}
+            ,{field: 'createTime', title: '创建时间', sort: true}
+            ,{fixed: 'right', title: '操作', align:'center', toolbar: '#barCategory'}
+        ]]
+    });
+
+    table.on('tool(table-category)', function(obj){
+        var data = obj.data;
+        if(obj.event === 'del'){
+            layer.confirm('确定删除吗？', function(index){
+                layer.close(index);
+                $.ajax({
+                    type: 'GET',
+                    url: ctx + '/cate/deleteById?id=' + data.id,
+                    dataType: 'json',
+                    success: function(e){
+                        if(e.code == 0){
+                            obj.del();
+                            layer.msg(e.msg);
+                        }else{
+                            layer.msg(e.msg);
+                        }
+                    },
+                    error: function(){
+                        layer.msg("服务器错误，请稍后再试");
+                    }
+                });
+            });
+        } else if(obj.event === 'edit'){
+            layer.open({
+                type: 2,
+                title: '编辑分类',
+                area: ['100%', '100%'],
+                shadeClose: false,
+                closeBtn: 1,
+                content: ctx + '/cate/editUI?id=' + data.id,
+                end: function(){
+                    table.reload('table-category');
+                }
+            });
+        }
+    });
+
+
+    form.on('submit(formDemo)', function(data) {
+        $.ajax({
+            type: 'POST',
+            url: ctx + '/cate/saveOrUpdate',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8',
+            data: JSON.stringify(data.field),
+            success: function(e) {
+                console.log("后端返回数据：", e);
+                if (e && e.code === 0) {
+                    layer.msg("保存成功", {icon: 1, time: 1000}, function() {
+                        window.location.href = ctx + "/category/list";
+                    });
+                } else {
+                    layer.msg(e ? e.msg : "保存失败", {icon: 2});
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("保存请求失败：", xhr.status, error);
+                layer.msg("服务器错误，请稍后再试", {icon: 2});
+            },
+            complete: function() {
+                $(this).attr('disabled', false);
+            }
+        });
+        return false;
+    });
+
+
+    $("#add").click(function(){
+        layer.open({
+            type: 2,
+            title: '添加分类',
+            area: ['100%', '100%'],
+            shadeClose: false,
+            closeBtn: 1,
+            content: ctx + '/cate/addUI',
+            end: function(){
+                table.reload('table-category');
+            }
+        });
+    });
+
+    $('#search-button').click(function(){
+        table.reload('table-category', {
+            page: { curr: 1 }
+            ,where: {
+                'categoryName': $('#categoryName').val()
+            }
+        });
+    });
+});
